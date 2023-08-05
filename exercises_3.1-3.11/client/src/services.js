@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = 'http://localhost:8000/api/persons'
+const baseURL = '/api/persons'
 
 const GetNames = (setPersons, setNotificationMessageText, setError) => {
     const request = axios.get(baseURL)
