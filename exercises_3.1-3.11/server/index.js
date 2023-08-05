@@ -2,6 +2,8 @@ const express = require("express")
 const app = express()
 const morgan = require("morgan")
 const cors = require("cors")
+const Person = require('./models/person')
+require('dotenv').config()
 
 app.use(express.json())
 app.use(express.static("build"))
@@ -35,12 +37,14 @@ let persons = [
 ]
 
 app.get("/api/persons", (req, res) => {
-    res.json(persons)
+Person.find({})
+.then(person => {res.json(person)})
 })
 
 app.get("/api/persons/:id", (req, res) => {
-    const id = Number(req.params.id)
-    res.json(persons.find(person => person.id === id))
+Person.findById(req.params.id).then(person => {
+    res.json(person)
+})
 })
 
 app.delete('/api/persons/:id', (req, res) => {
@@ -61,12 +65,7 @@ app.post('/api/persons', (req, res) => {
 
     const body = req.body
     console.log(body)
-// 
-    const maxId = persons.length > 0
-    ? Math.max(...persons.map(n => n.id)) 
-    : 0
-
-
+    
     if (!body.name || !body.number) {
         return res.status(400).json({
             error: 'name or number missing'
@@ -78,16 +77,14 @@ app.post('/api/persons', (req, res) => {
         })
     }
 
-    const person = {
-        id: maxId + 1,
+    const person = new Person ({
         name: body.name,
         number: body.number
-    }
+    })
 
-    persons = persons.concat(person)
-
-    res.json(person)
-    console.log(person)
+    person.save().then(savedPerson => {
+        res.json(savedPerson)
+    })
 })
 
 const PORT = process.env.PORT || 8000

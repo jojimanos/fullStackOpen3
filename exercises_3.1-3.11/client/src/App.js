@@ -16,6 +16,10 @@ const App = () => {
   const [displaySuccessOrFailure, setDisplaySuccessOrFailure] = useState(false)
   const [error, setError] = useState(false)
 
+  useEffect(() => {
+    services.GetNames(setPersons, setNotificationMessageText, setError)
+  }, [])
+
   const handleSubmitName = (event) => {
     event.preventDefault();
 
@@ -37,7 +41,7 @@ const App = () => {
       const newPerson = {
         name: newName,
         number: newNumber,
-        id: persons.length + 1
+        // id: persons.length + 1
       }
 
       services.AddName(newPerson, setNotificationMessageText, setError, setDisplaySuccessOrFailure)
@@ -58,13 +62,15 @@ const App = () => {
     }
   }
 
-  let searchPerson = persons.filter((person) => person.name.toLowerCase() === searchName.toLowerCase())
-
-  console.log(persons, searchPerson)
+  let searchPerson = ''
 
   useEffect(() => {
-    services.GetNames(setPersons, setNotificationMessageText, setError)
-  }, [])
+  searchPerson = persons.length > 0 ? persons.filter((person) => person.name.toLowerCase() === searchName.toLowerCase()) : null
+  console.log(searchPerson)
+  }, [persons])
+
+  console.log(persons)
+
 
   return (
     <div>
