@@ -36,11 +36,11 @@ const App = () => {
       if (confirmation) {
         services.UpdateNumber(updatedEntry, setPersons, persons, setNotificationMessageText, setError, setDisplaySuccessOrFailure)
 
-      setPersons(persons.map(person => person.name === updatedEntry.name ? updatedEntry : person))
-      setNewName('');
-      setNewNumber('')
-      excludeDuplicates = ""
-      console.log(persons)
+        setPersons(persons.map(person => person.name === updatedEntry.name ? updatedEntry : person))
+        setNewName('');
+        setNewNumber('')
+        excludeDuplicates = ""
+        console.log(persons)
       }
     } else {
 
@@ -51,7 +51,16 @@ const App = () => {
 
       services.AddName(newPerson, setNotificationMessageText, setError, setDisplaySuccessOrFailure)
 
-      setPersons([...persons, newPerson]);
+      if (newPerson.name.length < 3) {
+        setPersons(persons)
+      } else if (newPerson.number.length !== 9) {
+        setPersons(persons)
+      } else if (newPerson.number.includes("-", 2) === false || newPerson.number.includes("-", 3)) {
+        setPersons(persons)
+      }
+      else {
+        setPersons([...persons, newPerson]);
+      }
       setNewName('');
       setNewNumber('')
       excludeDuplicates = ""
@@ -76,7 +85,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      {displaySuccessOrFailure ? <NotificationMessage text={notificationMessageText} error={error}/> : null}
+      {displaySuccessOrFailure ? <NotificationMessage text={notificationMessageText} error={error} /> : null}
       <div>
         <SearchBar searchName={searchName} setSearchName={setSearchName} searchPerson={searchPerson} />
         <InputForm newName={newName} newNumber={newNumber} setNewName={setNewName} setNewNumber={setNewNumber} handleSubmit={

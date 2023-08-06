@@ -7,7 +7,7 @@ const GetNames = (setPersons, setNotificationMessageText, setError) => {
     return request.then(response => {
         console.log('Success when getting the names');
         setPersons(response.data)
-    }).catch((error) => setError(true), setNotificationMessageText("There was an error while trying to get the entries."))
+    }).catch((error) => console.log(error.response.data.error), setError(true), setNotificationMessageText(`There was an error while trying to get the entries.`))
 }
 
 const AddName = (newPerson, setNotificationMessageText, setError, setDisplaySuccessOrFailure) => {
