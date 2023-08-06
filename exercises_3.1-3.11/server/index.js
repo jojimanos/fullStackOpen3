@@ -32,7 +32,7 @@ app.get("/api/persons/:id", (req, res, next) => {
     )
 })
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
     Person.findByIdAndRemove(req.params.id)
         .then(result => {
             res.status(204).end()
@@ -41,7 +41,6 @@ app.delete('/api/persons/:id', (req, res) => {
 })
 
 app.get("/info", (req, res) => {
-    let numberOfPeople
     let date = new Date
     Person.find({}).then(person => {res.send(`<p>The phonebook has information about ${person.length} people</p>
 <p>${date}</p>
