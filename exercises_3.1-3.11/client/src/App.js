@@ -26,7 +26,7 @@ const App = () => {
     let excludeDuplicates = persons.filter(person => person.name === newName)
 
     if (excludeDuplicates.length) {
-      const confirmation = window.confirm(`${newName} already exists. Replace the old naumber?`)
+      const confirmation = window.confirm(`${newName} already exists. Replace the old number?`)
       const entryToUpdate = persons.find(person => person.name === newName)
       const updatedEntry = {
         ...entryToUpdate,
@@ -35,13 +35,18 @@ const App = () => {
       console.log(updatedEntry)
       if (confirmation) {
         services.UpdateNumber(updatedEntry, setPersons, persons, setNotificationMessageText, setError, setDisplaySuccessOrFailure)
+
+      setPersons(persons.map(person => person.name === updatedEntry.name ? updatedEntry : person))
+      setNewName('');
+      setNewNumber('')
+      excludeDuplicates = ""
+      console.log(persons)
       }
     } else {
 
       const newPerson = {
         name: newName,
         number: newNumber,
-        // id: persons.length + 1
       }
 
       services.AddName(newPerson, setNotificationMessageText, setError, setDisplaySuccessOrFailure)
@@ -62,15 +67,11 @@ const App = () => {
     }
   }
 
-  let searchPerson = ''
-
-  useEffect(() => {
-  searchPerson = persons.length > 0 ? persons.filter((person) => person.name.toLowerCase() === searchName.toLowerCase()) : null
-  console.log(searchPerson)
-  }, [persons])
+  let searchPerson = persons.filter((person) => person.name.toLowerCase() === searchName.toLowerCase())
 
   console.log(persons)
-
+  console.log("notification message", notificationMessageText)
+  console.log("error state", error)
 
   return (
     <div>
